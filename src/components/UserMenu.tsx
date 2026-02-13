@@ -1,3 +1,4 @@
+import { useAuth } from "@/context/AuthContext";
 import { useEffect, useRef, useState } from "react";
 
 const menuItems = [
@@ -9,16 +10,14 @@ const menuItems = [
     name: "Settings",
     href: "/settings",
   },
-  {
-    name: "Logout",
-    href: "/logout",
-  },
 ];
 
 const UserMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
+  const { logout } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -77,6 +76,15 @@ const UserMenu = () => {
                 </a>
               </li>
             ))}
+            <li role='none'>
+              <button
+                type='button'
+                onClick={() => logout()}
+                className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+              >
+                Logout
+              </button>
+            </li>
           </ul>
         </div>
       )}

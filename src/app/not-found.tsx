@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const NotFound = () => {
   return (
     <section className='bg-white  min-h-screen h-full w-full'>
@@ -13,12 +15,12 @@ const NotFound = () => {
             Sorry, we can't find that page. You'll find lots to explore on the
             home page.{" "}
           </p>
-          <a
-            href='#'
+          <Link
+            href='/'
             className='inline-flex text-white bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center my-4'
           >
             Back to Homepage
-          </a>
+          </Link>
         </div>
       </div>
     </section>
