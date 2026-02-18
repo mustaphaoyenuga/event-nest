@@ -1,49 +1,32 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { Apple } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
-import Logo from "@/components/Logo";
 import SocialLoginButton from "@/components/SocialLoginButton";
-import { useAuth } from "@/context/AuthContext";
 
 interface FormData {
+  name: string
   email: string;
   password: string;
 }
-const SignInPage = () => {
+const SignUpPage = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
-  const { login } = useAuth();
   const router = useRouter();
 
-  const [loginError, setLoginError] = useState("");
+  const [signUpError, setSignUpError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
-    // console.log("Form submitted with data:", data);
-    // console.log("Form errors:", errors);
-    setLoginError("");
-    setIsLoading(true);
-    try {
-      const isLoggedIn = login(data.email, data.password);
-      if (!isLoggedIn) {
-        return setLoginError("Username or Password must be incorrect");
-      }
-      return router.push("/");
-    } catch (err) {
-      console.error("Login error", err);
-      setLoginError("An error occurred during login. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    console.log("Form submitted with data:", data);
+   
   };
   return (
     <div className='flex-1 flex items-center justify-center h-full'>
@@ -52,9 +35,9 @@ const SignInPage = () => {
           <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl'>
             Create account
           </h1>
-          {loginError && (
+          {signUpError && (
             <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm'>
-              {loginError}
+              {signUpError}
             </div>
           )}
           <div className='flex flex-col items-center space-x-4 lg:flex-row mt-4'>
@@ -73,27 +56,27 @@ const SignInPage = () => {
           >
             <div>
               <label
-                htmlFor='email'
+                htmlFor='name'
                 className='block mb-1.5 text-sm font-medium text-gray-900'
               >
                 Full Name
               </label>
               <input
-                id='email'
-                type='email'
+                id='name'
+                type='text'
                 className={`bg-gray-50 border ${
-                  errors.email
+                  errors.name
                     ? "border-red-500"
                     : "border-gray-300 focus:ring-gray-400 focus:border-gray-600"
                 } outline-none text-gray-900 rounded-lg  block w-full p-2`}
-                {...register("email", {
-                  required: "Email Address is required",
-                  minLength: 5,
+                {...register("name", {
+                  required: "Full Name is required",
+                  minLength: 2,
                 })}
               />
-              {errors.email && (
+              {errors.name && (
                 <span className='text-red-500 text-xs mt-1'>
-                  {errors.email.message}
+                  {errors.name.message}
                 </span>
               )}
             </div>
@@ -175,4 +158,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default SignUpPage;
