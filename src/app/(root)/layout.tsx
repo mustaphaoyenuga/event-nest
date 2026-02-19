@@ -2,13 +2,12 @@ import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 const PagesLayout = async ({ children }: { children: React.ReactNode }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log("Session:", session?.user.name);
-  
   return (
     <>
       <Header session={session} />

@@ -10,7 +10,7 @@ const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
   });
 
   if (session) {
-    redirect('/')
+    redirect('/');
   }
   return (
     <div className='w-full min-h-screen'>

@@ -2,47 +2,48 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import SocialLoginButton from "@/components/SocialLoginButton";
 import { authClient } from "@/lib/auth-client";
 
 interface FormData {
-  name: string;
   email: string;
   password: string;
 }
-
-const SignUpForm = () => {
+const SignInForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormData>();
+  const router = useRouter();
 
-  const [signUpError, setSignUpError] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+    setLoginError("");
     setIsLoading(true);
-    setSignUpError("");
 
-    const { name, email, password } = data;
+    const { email, password } = data;
+
     try {
-      const { error } = await authClient.signUp.email({
+      const { error } = await authClient.signIn.email({
         email,
         password,
-        name,
         callbackURL: "/",
       });
 
       if (error) {
-        setSignUpError(error.message ?? "Unknown error");
+        setLoginError(error.message ?? "An error occured during login.");
         return;
       }
     } catch (error) {
+      setLoginError("An unexpected error occurred. Please try again.");
       console.error(error);
-      setSignUpError("An unexpected error occurrd. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -52,11 +53,11 @@ const SignUpForm = () => {
       <div className=' bg-white flex-1 rounded-lg shadow md:mt-0 sm:max-w-lg xl:p-0'>
         <div className='p-6 space-y-4 sm:p-8'>
           <h1 className='text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl'>
-            Create account
+            Welcome back
           </h1>
-          {signUpError && (
+          {loginError && (
             <div className='bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm'>
-              {signUpError}
+              {loginError}
             </div>
           )}
           <div className='flex flex-col items-center space-x-4 lg:flex-row mt-4'>
@@ -73,32 +74,6 @@ const SignUpForm = () => {
             onSubmit={handleSubmit(onSubmit)}
             noValidate
           >
-            <div>
-              <label
-                htmlFor='name'
-                className='block mb-1.5 text-sm font-medium text-gray-900'
-              >
-                Full Name
-              </label>
-              <input
-                id='name'
-                type='text'
-                className={`bg-gray-50 border ${
-                  errors.name
-                    ? "border-red-500"
-                    : "border-gray-300 focus:ring-gray-400 focus:border-gray-600"
-                } outline-none text-gray-900 rounded-lg  block w-full p-2`}
-                {...register("name", {
-                  required: "Full Name is required",
-                  minLength: 2,
-                })}
-              />
-              {errors.name && (
-                <span className='text-red-500 text-xs mt-1'>
-                  {errors.name.message}
-                </span>
-              )}
-            </div>
             <div>
               <label
                 htmlFor='email'
@@ -149,6 +124,29 @@ const SignUpForm = () => {
                 </span>
               )}
             </div>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-start'>
+                <div className='flex items-center h-5'>
+                  <input
+                    id='remember'
+                    aria-describedby='remember'
+                    type='checkbox'
+                    className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-orange-200 '
+                  />
+                </div>
+                <div className='ml-3 text-sm'>
+                  <label htmlFor='remember' className='text-gray-500'>
+                    Remember me
+                  </label>
+                </div>
+              </div>
+              <a
+                href='#'
+                className='text-sm font-medium text-orange-500 hover:underline'
+              >
+                Forgot password?
+              </a>
+            </div>
 
             <button
               type='submit'
@@ -159,15 +157,15 @@ const SignUpForm = () => {
                   : "bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300"
               }`}
             >
-              {isLoading ? "Creating account..." : "Create your account"}
+              {isLoading ? "Signing in..." : "Sign in to your account"}
             </button>
             <p className='text-sm font-light text-gray-500'>
-              Already have an account?
+              Don&apos;t have an account yet?
               <Link
-                href='/sign-in'
+                href='/sign-up'
                 className='ml-1 font-medium text-orange-500 hover:underline'
               >
-                Sign in
+                Sign up here
               </Link>
             </p>
           </form>
@@ -177,4 +175,4 @@ const SignUpForm = () => {
   );
 };
 
-export default SignUpForm;
+export default SignInForm;

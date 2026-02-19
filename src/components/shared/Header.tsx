@@ -64,9 +64,8 @@ const Header = ({ session }: { session: Session | null }) => {
                 <li key={href}>
                   <Link
                     href={href}
-                    className={`text-sm font-medium transition-colors hover:text-orange-500 ${
-                      isActive ? "text-orange-500" : "text-gray-600"
-                    }
+                    className={`text-sm font-medium transition-colors hover:text-orange-500 ${isActive ? "text-orange-500" : "text-gray-600"
+                      }
                     `}
                   >
                     {label}
@@ -77,7 +76,7 @@ const Header = ({ session }: { session: Session | null }) => {
           </ul>
 
           <div className='hidden md:block'>
-            {!session ? <AuthButtons /> : <UserMenu />}
+            {!session ? <AuthButtons /> : <UserMenu name={session.user.name} email={session.user.email} />}
           </div>
 
           <div className='flex md:hidden'>
@@ -131,7 +130,7 @@ const Header = ({ session }: { session: Session | null }) => {
 
             <hr className='my-4 border-gray-100' />
 
-            {!session ? <AuthButtons isMobile /> : <UserMenu />}
+            {!session ? <AuthButtons isMobile /> : <UserMenu name={session.user.name} email={session.user.email} />}
           </div>
         </div>
       </div>
