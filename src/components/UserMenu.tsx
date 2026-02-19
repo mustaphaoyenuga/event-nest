@@ -1,4 +1,4 @@
-import { useAuth } from "@/context/AuthContext";
+import { signOut } from "@/lib/actions/auth-actions";
 import { useEffect, useRef, useState } from "react";
 
 const menuItems = [
@@ -16,8 +16,6 @@ const UserMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const { logout } = useAuth();
 
   const toggleMenu = () => setIsMenuOpen((prev) => !prev);
 
@@ -40,6 +38,10 @@ const UserMenu = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isMenuOpen]);
+
+  const handleLogout = async () => {
+    await signOut();
+  };
   return (
     <div className='relative'>
       <button
@@ -79,7 +81,7 @@ const UserMenu = () => {
             <li role='none'>
               <button
                 type='button'
-                onClick={() => logout()}
+                onClick={handleLogout}
                 className='block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
               >
                 Logout
