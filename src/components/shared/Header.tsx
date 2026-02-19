@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Logo from "../Logo";
+import { auth } from "@/lib/auth";
+import UserMenu from "../UserMenu";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -31,7 +33,8 @@ const AuthButtons = ({ isMobile }: { isMobile?: boolean }) => (
   </div>
 );
 
-const Header = () => {
+type Session = typeof auth.$Infer.Session;
+const Header = ({ session }: { session: Session | null }) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(!false);
 
@@ -74,7 +77,7 @@ const Header = () => {
           </ul>
 
           <div className='hidden md:block'>
-            <AuthButtons />
+            {!session ? <AuthButtons /> : <UserMenu />}
           </div>
 
           <div className='flex md:hidden'>
@@ -94,6 +97,7 @@ const Header = () => {
         </div>
       </nav>
 
+      {/* Mobile Navigation */}
       <div
         className={`fixed inset-0 z-50 transform transition-transform duration-300 ease-in-out md:hidden ${isOpen ? "translate-x-0" : "translate-x-full"}`}
       >
@@ -127,7 +131,7 @@ const Header = () => {
 
             <hr className='my-4 border-gray-100' />
 
-            <AuthButtons isMobile />
+            {!session ? <AuthButtons isMobile /> : <UserMenu />}
           </div>
         </div>
       </div>

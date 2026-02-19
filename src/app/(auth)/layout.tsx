@@ -1,6 +1,17 @@
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+
+import { auth } from "@/lib/auth";
 import Logo from "@/components/Logo";
 
-const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+const AuthLayout = async ({ children }: { children: React.ReactNode }) => {
+   const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (session) {
+    redirect('/')
+  }
   return (
     <div className='w-full min-h-screen'>
       <section className='bg-gray-100'>

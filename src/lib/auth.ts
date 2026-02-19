@@ -1,17 +1,24 @@
 import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { getDb } from "./db";
+import { MongoClient, ServerApiVersion } from "mongodb";
+import { nextCookies } from "better-auth/next-js";
 
-const db = await getDb();
+const client = new MongoClient(process.env.MONGODB_URI as string, {
+  serverApi: ServerApiVersion.v1,
+});
+const db = client.db();
 export const auth = betterAuth({
-  database: mongodbAdapter(db),
+  database: mongodbAdapter(db, {
+    client,
+  }),
   emailAndPassword: {
     enabled: true,
   },
   socialProviders: {
     google: {
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      clientId: "",
+      clientSecret: "",
     },
   },
+  plugins: [nextCookies()],
 });
