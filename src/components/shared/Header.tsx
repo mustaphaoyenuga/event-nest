@@ -1,12 +1,10 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
 import Logo from "../Logo";
-import { auth } from "@/lib/auth";
 import UserMenu from "../UserMenu";
+import { auth } from "@/lib/auth";
+import MobileMenu from "../MobileMenu";
+import NavLink from "../NavLink";
+import { headers } from "next/headers";
 
 const navItems = [
   { label: "Home", href: "/" },
@@ -33,24 +31,11 @@ const AuthButtons = ({ isMobile }: { isMobile?: boolean }) => (
   </div>
 );
 
-type Session = typeof auth.$Infer.Session;
-const Header = ({ session }: { session: Session | null }) => {
-  const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(!false);
-
-  const toggleMenu = () => setIsOpen(!isOpen);
-
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-  }, [isOpen]);
+// type Session = typeof auth.$Infer.Session;
+const Header = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
   return (
     <header className='sticky top-0 z-50 w-full border-b border-gray-200 bg-white/80 backdrop-blur-none'>
       <nav className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
@@ -58,6 +43,7 @@ const Header = ({ session }: { session: Session | null }) => {
           <Logo />
 
           <ul className='hidden md:flex md:items-center md:space-x-6'>
+<<<<<<< HEAD
             {navItems.map(({ label, href }) => {
               const isActive = pathname === href;
               return (
@@ -77,24 +63,34 @@ const Header = ({ session }: { session: Session | null }) => {
 
           <div className='hidden md:block'>
             {!session ? <AuthButtons /> : <UserMenu name={session.user.name} email={session.user.email} />}
+=======
+            {navItems.map(({ label, href }) => (
+              <li key={href}>
+                <NavLink
+                  href={href}
+                  className={`text-sm font-medium transition-colors hover:text-orange-500 text-gray-600`}
+                  activeClassName='text-orange-500'
+                >
+                  {label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+
+          <div className='hidden md:block'>
+            {!session ? <AuthButtons /> : <UserMenu user={session.user} />}
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
           </div>
 
-          <div className='flex md:hidden'>
-            <button
-              type='button'
-              onClick={toggleMenu}
-              className='inline-flex items-center p-2 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-gray-200'
-              aria-controls='mobile-menu'
-              aria-expanded={isOpen}
-            >
-              <span className='sr-only'>
-                {isOpen ? "Close main menu" : "Open main menu"}
-              </span>
-              {isOpen ? <X className='size-6' /> : <Menu className='size-6' />}
-            </button>
-          </div>
+          <MobileMenu
+            navItems={navItems}
+            authButtons={<AuthButtons isMobile />}
+           
+            session={session}
+          />
         </div>
       </nav>
+<<<<<<< HEAD
 
       {/* Mobile Navigation */}
       <div
@@ -134,6 +130,8 @@ const Header = ({ session }: { session: Session | null }) => {
           </div>
         </div>
       </div>
+=======
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
     </header>
   );
 };

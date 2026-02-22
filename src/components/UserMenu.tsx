@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 "use client"
 
 import { authClient } from "@/lib/auth-client";
+=======
+"use client";
+
+import { signOut } from "@/lib/actions/auth-actions";
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
 import { useEffect, useRef, useState } from "react";
 
 const menuItems = [
@@ -14,11 +20,19 @@ const menuItems = [
   },
 ];
 
+<<<<<<< HEAD
 interface UserMenuProps {
   name: string,
   email: string
 }
 const UserMenu = ({ name, email }: UserMenuProps) => {
+=======
+interface UserProps {
+  name: string;
+  email: string;
+}
+const UserMenu = ({ user }: { user: UserProps }) => {
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -68,9 +82,15 @@ const UserMenu = ({ name, email }: UserMenuProps) => {
           className='absolute right-0 top-6 bg-white shadow-sm z-50 text-base rounded-lg my-4 list-none divide-y divide-gray-100 border border-gray-200 min-w-48'
         >
           <div className='px-4 py-3'>
+<<<<<<< HEAD
             <span className='block text-sm text-gray-900'>{name}</span>
             <span className='block text-sm text-gray-500 truncate'>
               {email}
+=======
+            <span className='block text-sm text-gray-900'>{user.name}</span>
+            <span className='block text-sm text-gray-500 truncate'>
+              {user.email}
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
             </span>
           </div>
           <ul className='py-2' role='menu' aria-labelledby='user-menu-button'>

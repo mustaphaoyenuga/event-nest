@@ -3,9 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import SocialLoginButton from "@/components/SocialLoginButton";
-import { authClient } from "@/lib/auth-client";
+import { signUpSchema } from "@/lib/validation";
+import { LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   name: string;
@@ -14,11 +17,14 @@ interface FormData {
 }
 
 const SignUpForm = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    resolver: zodResolver(signUpSchema),
+  });
 
   const [signUpError, setSignUpError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -29,20 +35,12 @@ const SignUpForm = () => {
 
     const { name, email, password } = data;
     try {
-      const { error } = await authClient.signUp.email({
-        email,
-        password,
-        name,
-        callbackURL: "/",
-      });
-
-      if (error) {
-        setSignUpError(error.message ?? "Unknown error");
-        return;
-      }
+      await signUp(email, password, name);
+      router.push("/");
     } catch (error) {
-      console.error(error);
-      setSignUpError("An unexpected error occurrd. Please try again.");
+      setSignUpError(
+        ` ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     } finally {
       setIsLoading(false);
     }
@@ -117,6 +115,10 @@ const SignUpForm = () => {
                 {...register("email", {
                   required: "Email Address is required",
                   minLength: 5,
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Please enter a valid email address",
+                  },
                 })}
               />
               {errors.email && (
@@ -153,14 +155,22 @@ const SignUpForm = () => {
             <button
               type='submit'
               disabled={isLoading}
-              className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+              className={`w-full flex justify-center text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-orange-500  ${
                 isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300"
+                  ? "cursor-not-allowed"
+                  : " focus:ring-4 focus:outline-none focus:ring-orange-300 hover:bg-orange-600"
               }`}
             >
-              {isLoading ? "Creating account..." : "Create your account"}
+              {isLoading ? (
+                <span className='flex items-center'>
+                  <LoaderCircle className='animate-spin h-4 w-4 mr-2' />{" "}
+                  Creating account...
+                </span>
+              ) : (
+                "Create your account"
+              )}
             </button>
+
             <p className='text-sm font-light text-gray-500'>
               Already have an account?
               <Link

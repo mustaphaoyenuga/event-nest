@@ -4,10 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { LoaderCircle } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 import SocialLoginButton from "@/components/SocialLoginButton";
-import { authClient } from "@/lib/auth-client";
+import { signIn } from "@/lib/actions/auth-actions";
 
 interface FormData {
   email: string;
@@ -29,6 +30,7 @@ const SignInForm = () => {
     setIsLoading(true);
 
     const { email, password } = data;
+<<<<<<< HEAD
 
     try {
       const { error } = await authClient.signIn.email({
@@ -44,6 +46,16 @@ const SignInForm = () => {
     } catch (error) {
       setLoginError("An unexpected error occurred. Please try again.");
       console.error(error);
+=======
+    try {
+      await signIn(email, password);
+      router.push("/");
+    } catch (err) {
+      console.error("Login error", err);
+      setLoginError(
+        err instanceof Error ? err.message : "An unexpected error occurred.",
+      );
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +74,11 @@ const SignInForm = () => {
           )}
           <div className='flex flex-col items-center space-x-4 lg:flex-row mt-4'>
             <SocialLoginButton provider='Google' onClick={() => {}} />
+<<<<<<< HEAD
             <SocialLoginButton provider='Apple' onClick={() => {}} />
+=======
+            <SocialLoginButton provider='Github' onClick={() => {}} />
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
           </div>
           <div className='flex items-center'>
             <div className='w-full h-0.5 bg-gray-300' />
@@ -151,6 +167,7 @@ const SignInForm = () => {
             <button
               type='submit'
               disabled={isLoading}
+<<<<<<< HEAD
               className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
                 isLoading
                   ? "bg-gray-400 cursor-not-allowed"
@@ -158,6 +175,22 @@ const SignInForm = () => {
               }`}
             >
               {isLoading ? "Signing in..." : "Sign in to your account"}
+=======
+              className={`w-full flex justify-center text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-orange-500  ${
+                isLoading
+                  ? "cursor-not-allowed"
+                  : " focus:ring-4 focus:outline-none focus:ring-orange-300 hover:bg-orange-600"
+              }`}
+            >
+              {isLoading ? (
+                <span className='flex items-center'>
+                  <LoaderCircle className='animate-spin h-4 w-4 mr-2' /> Signing
+                  in...
+                </span>
+              ) : (
+                "Sign in to your account"
+              )}
+>>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
             </button>
             <p className='text-sm font-light text-gray-500'>
               Don&apos;t have an account yet?
