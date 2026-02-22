@@ -104,7 +104,7 @@ const SignInForm = () => {
               <input
                 type='password'
                 className={`bg-gray-50 border ${
-                  errors.email
+                  errors.password
                     ? "border-red-500"
                     : "border-gray-300 focus:ring-gray-400 focus:border-gray-600"
                 } outline-none text-gray-900 rounded-lg focus:ring-orange-400 focus:border-orange-400 block w-full p-2`}
