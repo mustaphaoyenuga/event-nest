@@ -9,6 +9,7 @@ import SocialLoginButton from "@/components/SocialLoginButton";
 import { signUpSchema } from "@/lib/validation";
 import { LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { signUp } from "@/lib/actions/auth-actions";
 
 interface FormData {
   name: string;

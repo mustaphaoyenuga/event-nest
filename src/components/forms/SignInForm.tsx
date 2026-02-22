@@ -30,23 +30,6 @@ const SignInForm = () => {
     setIsLoading(true);
 
     const { email, password } = data;
-<<<<<<< HEAD
-
-    try {
-      const { error } = await authClient.signIn.email({
-        email,
-        password,
-        callbackURL: "/",
-      });
-
-      if (error) {
-        setLoginError(error.message ?? "An error occured during login.");
-        return;
-      }
-    } catch (error) {
-      setLoginError("An unexpected error occurred. Please try again.");
-      console.error(error);
-=======
     try {
       await signIn(email, password);
       router.push("/");
@@ -55,7 +38,6 @@ const SignInForm = () => {
       setLoginError(
         err instanceof Error ? err.message : "An unexpected error occurred.",
       );
->>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
     } finally {
       setIsLoading(false);
     }
@@ -74,11 +56,7 @@ const SignInForm = () => {
           )}
           <div className='flex flex-col items-center space-x-4 lg:flex-row mt-4'>
             <SocialLoginButton provider='Google' onClick={() => {}} />
-<<<<<<< HEAD
-            <SocialLoginButton provider='Apple' onClick={() => {}} />
-=======
             <SocialLoginButton provider='Github' onClick={() => {}} />
->>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
           </div>
           <div className='flex items-center'>
             <div className='w-full h-0.5 bg-gray-300' />
@@ -167,15 +145,6 @@ const SignInForm = () => {
             <button
               type='submit'
               disabled={isLoading}
-<<<<<<< HEAD
-              className={`w-full text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
-                isLoading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-orange-500 hover:bg-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-300"
-              }`}
-            >
-              {isLoading ? "Signing in..." : "Sign in to your account"}
-=======
               className={`w-full flex justify-center text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-orange-500  ${
                 isLoading
                   ? "cursor-not-allowed"
@@ -190,7 +159,6 @@ const SignInForm = () => {
               ) : (
                 "Sign in to your account"
               )}
->>>>>>> ee7b7c1a99439a7941dffa53c57161fecb046085
             </button>
             <p className='text-sm font-light text-gray-500'>
               Don&apos;t have an account yet?
