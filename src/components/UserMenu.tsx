@@ -1,3 +1,5 @@
+"use client";
+
 import { signOut } from "@/lib/actions/auth-actions";
 import { useEffect, useRef, useState } from "react";
 
@@ -12,7 +14,11 @@ const menuItems = [
   },
 ];
 
-const UserMenu = () => {
+interface UserProps {
+  name: string;
+  email: string;
+}
+const UserMenu = ({ user }: { user: UserProps }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -62,9 +68,9 @@ const UserMenu = () => {
           className='absolute right-0 top-6 bg-white shadow-sm z-50 text-base rounded-lg my-4 list-none divide-y divide-gray-100 border border-gray-200 min-w-48'
         >
           <div className='px-4 py-3'>
-            <span className='block text-sm text-gray-900'>Musty Doe</span>
+            <span className='block text-sm text-gray-900'>{user.name}</span>
             <span className='block text-sm text-gray-500 truncate'>
-              musty@gmail.com
+              {user.email}
             </span>
           </div>
           <ul className='py-2' role='menu' aria-labelledby='user-menu-button'>
