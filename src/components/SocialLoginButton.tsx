@@ -97,7 +97,7 @@ const SocialLoginButton = ({
           <AppleIcon />
         ) : null}
       </span>
-      Sign in with {provider}
+      Continue with {provider}
     </button>
   );
 };
